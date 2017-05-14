@@ -1,0 +1,3 @@
+Origin https://github.com/krasi-georgiev/cd-demo
+Copyright (c) by Krasi Georgiev
+Modification to Jenkinsfile by Jaden McKey

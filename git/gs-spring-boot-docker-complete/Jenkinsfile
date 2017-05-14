@@ -1,0 +1,29 @@
+env.DOCKER_REGISTRY = "registry:5000" 
+env.DOCKER_REGISTRY_URL = "https://${DOCKER_REGISTRY}"
+
+node("docker-test") {
+	checkout scm
+
+	stage("Configure") {
+		env.PATH="${tool 'maven-3.3.9'}/bin:${env.PATH}"
+	}
+
+	stage("Unit Test") {
+		configFileProvider([configFile(fileId: 'ae90fbf0-58b7-496c-9c04-35b0c24faac3', variable: 'MAVEN_SETTINGS')]) {
+			sh "mvn -s ${MAVEN_SETTINGS} -B -V -U -e clean test"
+		}
+	}
+
+	stage("Package") {
+		configFileProvider([configFile(fileId: 'ae90fbf0-58b7-496c-9c04-35b0c24faac3', variable: 'MAVEN_SETTINGS')]) {	
+			sh "mvn -s ${MAVEN_SETTINGS} -Dmaven.test.skip=true -B -V -U -e package"
+		}
+	}
+
+	stage("Deploy") {
+		configFileProvider([configFile(fileId: 'ae90fbf0-58b7-496c-9c04-35b0c24faac3', variable: 'MAVEN_SETTINGS')]) {
+			sh "mvn -s ${MAVEN_SETTINGS} -Dmaven.test.skip=true -B -V -U -e deploy"
+		}
+	}
+}
+
