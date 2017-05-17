@@ -103,6 +103,14 @@ The following credentials are set initally:
 | Registry | https://registry:5000/ | admin | admin123 |
 | Portainer<br/>(optional) | http://scm:8084/#/dashboard</br>http://test:8084/#/dashboard</br>http://staging:8084/#/dashboard</br>http://production:8084/#/dashboard | <i>unset</i> | <i>unset</i> |
 
+## Usage
+
+The environment is configured for CI/CD on both source projects. You can validate this setup by committing a change to any of the projects, This will trigger execution of the corresponding Jenkins pipeline.
+
+After the pipeline completes successfully for the Go project `cd-demo`, you can validate deployment in the production environment by checking URL `http://production:8080/ping` or `http://production:8080/hi`.
+
+After the pipeline completes successfully for the Spring Boot project `gs-spring-boot-docker-complete`, the resulting snapshot JAR will be deployed to Nexus. You can validate this result by checking repository content at `http://dmz/nexus/#browse/browse/components:scm-docker-snapshots`.
+
 ## Known Issues
 
 When SCM services refuse to start and remain in the `Pending` state for deployment on the 2nd swarm node, this is caused by Docker not detecting the volumes or REX-Ray driver. To resolve this execute commands:
